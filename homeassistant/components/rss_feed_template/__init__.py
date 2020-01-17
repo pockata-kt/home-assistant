@@ -81,21 +81,23 @@ class RssView(HomeAssistantView):
         response = '<?xml version="1.0" encoding="utf-8"?>\n\n'
 
         response += "<rss>\n"
+        response += "  <channel>\n"
         if self._title is not None:
-            response += "  <title>%s</title>\n" % escape(self._title.async_render())
+            response += "    <title>%s</title>\n" % escape(self._title.async_render())
 
         for item in self._items:
-            response += "  <item>\n"
+            response += "    <item>\n"
             if "title" in item:
-                response += "    <title>"
+                response += "      <title>"
                 response += escape(item["title"].async_render())
                 response += "</title>\n"
             if "description" in item:
-                response += "    <description>"
+                response += "      <description>"
                 response += escape(item["description"].async_render())
                 response += "</description>\n"
-            response += "  </item>\n"
+            response += "    </item>\n"
 
+        response += "  </channel>\n"
         response += "</rss>\n"
 
         return web.Response(body=response, content_type=CONTENT_TYPE_XML, status=200)
